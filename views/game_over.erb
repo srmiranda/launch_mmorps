@@ -1,0 +1,8 @@
+<form action="/" method="post">
+<% if game_winner == "player" %>
+<p><%= "You won!" %></p>
+<% else %>
+<p><%= "Computer won. Better luck next time." %></p>
+<% end %>
+<input type="submit" name="play_again" value="Play Again?">
+</form>
