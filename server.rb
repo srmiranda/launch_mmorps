@@ -31,6 +31,16 @@ def score
  end
 end
 
+def round_messages
+  round_message = ""
+  if session[:player_score] > 0 || session[:computer_score] > 0
+  round_message = "Player chose #{session[:player_choice]}. Computer chose #{session[:computer_pick]}. #{flash[:message]}"
+  elsif (session[:player_score] == 0 && session[:computer_score] == 0) && (session[:player_choice] == session[:computer_pick])
+  round_message = "Player chose #{session[:player_choice]}. Computer chose #{session[:computer_pick]}. Tie, choose again."
+  end
+  round_message
+end
+
 def game_winner
   if session[:player_score] >= 2
     "Player wins the game!"

@@ -7,11 +7,7 @@
   </head>
   <body>
     <h1>MMORPS</h1>
-    <% if player_score > 0 || computer_score > 0 %>
-    <p>Player chose <%= session[:player_choice] %>. Computer chose <%= session[:computer_pick] %>. <%= message %></p>
-    <% elsif (player_score == 0 && computer_score == 0) && (session[:player_choice] == session[:computer_pick]) %>
-    <p>Player chose <%= session[:player_choice] %>. Computer chose <%= session[:computer_pick] %>. Tie, choose again.</p>
-    <% end %>
+    <p><%= round_messages %><p>
     <table>
       <thead>
         <tr>
