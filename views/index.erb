@@ -7,8 +7,10 @@
   </head>
   <body>
     <h1>MMORPS</h1>
-    <% unless player_score == 0 && computer_score == 0 %>
-    <p>Player chose <%= player_choice %>. Computer chose <%= session[:computer_pick] %>. <%= session[:round_message] %></p>
+    <% if player_score > 0 || computer_score > 0 %>
+    <p>Player chose <%= session[:player_choice] %>. Computer chose <%= session[:computer_pick] %>. <%= message %></p>
+    <% elsif (player_score == 0 && computer_score == 0) && (session[:player_choice] == session[:computer_pick]) %>
+    <p>Player chose <%= session[:player_choice] %>. Computer chose <%= session[:computer_pick] %>. Tie, choose again.</p>
     <% end %>
     <table>
       <thead>
@@ -30,7 +32,7 @@
       <input type="submit" name="player_choice" value="Scissors">
       </form>
     <% elsif player_score == 2 || computer_score == 2 %>
-      <p><%= params[:winner_message] %></p>
+      <p><%= game_winner %></p>
       <form action="/" method="post">
       <input type="submit" name="play_again" value="Play Again?">
       </form>
