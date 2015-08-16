@@ -11,40 +11,30 @@ def starting_scores
 end
 
 def computer_pick
-  choices = ["r", "p", "s"]
+  choices = ["Rock", "Paper", "Scissors"]
   choices.sample
 end
 
-def match_win(player, computer)
-  if player == computer
-    "tie"
-  elsif (player == "Rock" && computer == "s") || (player == "Paper" && computer == "r") || (player == "Scissors" && computer == "p")
-    "player"
-  elsif (computer == "r" && player == "Scissors") || (computer == "p" && player == "Rock") || (computer == "s" && player == "Paper")
-    "computer"
-  end
-end
-
-def gameplay_messages(winner)
+def score
   until session[:player_score] == 2 || session[:computer_score] == 2
-    if winner == "tie"
-      "Tie. Choose again."
-    elsif winner == "computer"
-      "Computer wins this round!"
-      session[:computer_score] += 1
-    else
-      "You won this round!"
+    if (session[:player_choice] == "Rock" && session[:computer_pick] == "Scissors") || (session[:player_choice] == "Paper" && session[:computer_pick] == "Rock") || (session[:player_choice] == "Scissors" && session[:computer_pick] == "Paper")
       session[:player_score] += 1
+      session[:round_message] = "Player won."
+    elsif (session[:computer_pick] == "Rock" && session[:player_choice] == "Scissors") || (session[:computer_pick] == "Paper" && session[:player_choice] == "Rock") || (session[:computer_pick] == "Scissors" && session[:player_choice] == "Paper")
+      session[:computer_score] += 1
+      session[:round_message] = "Computer won."
+    elsif (session[:computer_pick] == session[:player_choice])
+      session[:round_message] = "Tie, choose again."
     end
-  redirect '/'
-  end
+  redirect "/"
+ end
 end
 
 def game_winner
-  if session[:player_score] > session[:computer_score]
-    "player"
+  if session[:player_score] >= 2
+    params[:winner_message] = "Player wins the game!"
   else
-    "computer"
+    params[:winner_message] = "Computer wins the game. Better luck next time!"
   end
 end
 
@@ -52,14 +42,22 @@ get '/' do
   if session[:player_score].nil? && session[:computer_score].nil?
     starting_scores
   end
+  game_winner
 
-  erb :form, locals: { player_score: session[:player_score], computer_score: session[:computer_score] }
+  erb :index, locals: { winner_message: session[:winner_message],
+    round_message: session[:round_message], player_choice: session[:player_choice],
+    player_score: session[:player_score], computer_score: session[:computer_score] }
 end
 
 post '/' do
-  winner = match_win(params["player_choice"], computer_pick)
-  gameplay_messages(winner)
-  game_winner
+  session[:player_choice] = params["player_choice"]
+  session[:computer_pick] = computer_pick
+  score
+  starting_scores
+  redirect '/'
+end
+
+post '/game_over' do
   starting_scores
   redirect '/'
 end

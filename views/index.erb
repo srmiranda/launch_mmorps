@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Massively Multiplayer Online Rock, Paper, Scissors</title>
+    <link rel="stylesheet" href="home.css">
+  </head>
+  <body>
+    <h1>MMORPS</h1>
+    <% unless player_score == 0 && computer_score == 0 %>
+    <p>Player chose <%= player_choice %>. Computer chose <%= session[:computer_pick] %>. <%= session[:round_message] %></p>
+    <% end %>
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Human:</td><td><%= player_score %></td></tr>
+        <tr><td>Computer:</td><td><%= computer_score %></td></tr>
+      </tbody>
+    </table>
+    <% if player_score < 2 && computer_score < 2 %>
+      <form action="/" method="post">
+      <h2>Choose!</h2>
+      <input type="submit" name="player_choice" value="Rock">
+      <input type="submit" name="player_choice" value="Paper">
+      <input type="submit" name="player_choice" value="Scissors">
+      </form>
+    <% elsif player_score == 2 || computer_score == 2 %>
+      <p><%= params[:winner_message] %></p>
+      <form action="/" method="post">
+      <input type="submit" name="play_again" value="Play Again?">
+      </form>
+    <% end %>
+  </body>
+</html>
